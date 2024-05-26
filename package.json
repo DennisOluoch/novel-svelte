@@ -7,13 +7,10 @@
 		"preview": "vite preview",
 		"package": "npx tailwindcss -o ./src/lib/styles/tailwind.css && svelte-kit sync && svelte-package && publint",
 		"prepublishOnly": "npm run package",
-		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"exports": {
 		".": {
