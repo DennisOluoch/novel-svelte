@@ -57,12 +57,6 @@ const Command = Extension.create({
 
 const getSuggestionItems = ({ query }: { query: string }) => {
 	return [
-		{
-			title: 'Continue writing',
-			description: 'Use AI to expand your thoughts.',
-			searchTerms: ['gpt'],
-			icon: Magic
-		},
 		// {
 		// 	title: 'Send Feedback',
 		// 	description: 'Let us know how we can improve.',

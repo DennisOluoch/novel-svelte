@@ -13,56 +13,13 @@
 
 	let selectedIndex = 0;
 
-	const { complete, isLoading } = useCompletion({
-		id: 'novel',
-		api: '/api/generate',
-		onResponse: (response) => {
-			if (response.status === 429) {
-				addToast({
-					data: {
-						text: 'You have reached your request limit for the day.',
-						type: 'error'
-					}
-				});
-				// va.track('Rate Limit Reached');
-				return;
-			}
-			editor.chain().focus().deleteRange(range).run();
-		},
-		onFinish: (_prompt, completion) => {
-			// highlight the generated text
-			editor.commands.setTextSelection({
-				from: range.from,
-				to: range.from + completion.length
-			});
-		},
-		onError: (e) => {
-			addToast({
-				data: {
-					text: e.message,
-					type: 'error'
-				}
-			});
-		}
-	});
-
 	const selectItem = (index: number) => {
 		const item = items[index];
 		// va.track('Slash Command Used', {
 		// 	command: item.title
 		// });
 		if (item) {
-			if (item.title === 'Continue writing') {
-				if ($isLoading) return;
-				complete(
-					getPrevText(editor, {
-						chars: 5000,
-						offset: 1
-					})
-				);
-			} else {
-				command(item);
-			}
+			command(item);
 		}
 	};
 
@@ -107,11 +64,7 @@
 				<div
 					class="flex h-10 w-10 items-center justify-center rounded-md border border-stone-200 bg-white"
 				>
-					{#if item.title === 'Continue writing' && $isLoading}
-						<LoadingCircle />
-					{:else}
-						<svelte:component this={anyify(item.icon)} size="18" />
-					{/if}
+				<svelte:component this={anyify(item.icon)} size="18" />
 				</div>
 				<div>
 					<p class="font-medium">{item.title}</p>

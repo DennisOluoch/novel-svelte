@@ -23,7 +23,6 @@
 	 * The API route to use for the OpenAI completion API.
 	 * Defaults to "/api/generate".
 	 */
-	export let completionApi = '/api/generate';
 	/**
 	 * Additional classes to add to the editor container.
 	 * Defaults to "relative min-h-[500px] w-full max-w-screen-lg border-stone-200 bg-white p-12 px-8 sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-12 sm:shadow-lg".
@@ -75,28 +74,6 @@
 
 	let element: Element;
 
-	const { complete, completion, isLoading, stop } = useCompletion({
-		id: 'novel',
-		api: completionApi,
-		onFinish: (_prompt, completion) => {
-			editor?.commands.setTextSelection({
-				from: editor.state.selection.from - completion.length,
-				to: editor.state.selection.from
-			});
-		},
-		onError: (err) => {
-			addToast({
-				data: {
-					text: err.message,
-					type: 'error'
-				}
-			});
-			// if (err.message === 'You have reached your request limit for the day.') {
-			// 	va.track('Rate Limit Reached');
-			// }
-		}
-	});
-
 	const content = createLocalStorageStore(storageKey, defaultValue);
 	let hydrated = false;
 	$: if (editor && !hydrated) {
@@ -110,18 +87,6 @@
 	}
 
 	let prev = '';
-
-	function insertAiCompletion() {
-		const diff = $completion.slice(prev.length);
-
-		prev = $completion;
-		editor?.commands.insertContent(diff);
-	}
-
-	$: {
-		[$completion];
-		insertAiCompletion();
-	}
 
 	const debouncedUpdates = createDebouncedCallback(async ({ editor }) => {
 		if (!disableLocalStorage) {
@@ -145,26 +110,8 @@
 				...editorProps
 			},
 			onUpdate: (e) => {
-				const selection = e.editor.state.selection;
-				const lastTwo = getPrevText(e.editor, {
-					chars: 2
-				});
-
-				if (lastTwo === '++' && !$isLoading) {
-					e.editor.commands.deleteRange({
-						from: selection.from - 2,
-						to: selection.from
-					});
-					complete(
-						getPrevText(e.editor, {
-							chars: 5000
-						})
-					);
-					// complete(e.editor.storage.markdown.getMarkdown());
-				} else {
-					onUpdate(e.editor);
-					debouncedUpdates(e);
-				}
+				onUpdate(e.editor);
+				debouncedUpdates(e);
 			},
 			autofocus: 'end'
 		});
