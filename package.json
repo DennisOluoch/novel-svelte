@@ -1,6 +1,20 @@
 {
-	"name": "novel-svelte",
+	"name": "novella-svelte",
 	"version": "0.1.7",
+	"description": "Heavily biased Notion-style WYSIWYG editor without the bells and whistles.",
+	"license": "MIT",
+	"author": "ZombieNW",
+	"keywords": [
+		"novel",
+		"wysiwyg",
+		"editor",
+		"notion",
+		"svelte"
+	],
+	"repository": {
+		"url": "git+https://github.com/BrainDeadSocial/novella-svelte.git"
+	},
+	"main": "./dist/index.js",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
