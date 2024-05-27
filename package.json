@@ -1,6 +1,6 @@
 {
 	"name": "novella-svelte",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Heavily biased Notion-style WYSIWYG editor without the bells and whistles.",
 	"license": "MIT",
 	"author": "ZombieNW",
