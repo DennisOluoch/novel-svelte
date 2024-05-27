@@ -1,15 +1,12 @@
 <script lang="ts">
 	import { getPrevText } from '$lib/editor.js';
 	import { LoadingCircle } from '$lib/ui/icons/index.js';
-	import { useCompletion } from 'ai/svelte';
 	import type { CommandItemProps } from './slash-command.js';
 	import { anyify } from '$lib/utils.js';
 	import { addToast } from '$lib/ui/toasts.svelte';
 
 	export let items: CommandItemProps[] = [];
 	export let command: any;
-	export let editor: any;
-	export let range: any;
 
 	let selectedIndex = 0;
 
@@ -64,7 +61,7 @@
 				<div
 					class="flex h-10 w-10 items-center justify-center rounded-md border border-stone-200 bg-white"
 				>
-				<svelte:component this={anyify(item.icon)} size="18" />
+					<svelte:component this={anyify(item.icon)} size="18" />
 				</div>
 				<div>
 					<p class="font-medium">{item.title}</p>
