@@ -16,11 +16,44 @@ Made for [BrainDead](https://github.com/BrainDeadSocial)
 
 # Usage
 
-WIP
+1. Set up your Svelte project.
+
+2. Install novella-svelte
+
+```bash
+npm i novella-svelte
+```
+
+3. Import and Use
+
+```svelte
+<script>
+	import { Editor } from 'novella-svelte';
+
+	let saveStatus = 'Saved';
+	let editor;
+</script>
+
+<main>
+	<Editor
+		bind:editor
+		onUpdate={() => {
+			saveStatus = 'Unsaved';
+		}}
+		onDebouncedUpdate={() => {
+			saveStatus = 'Saving...';
+			// Saving code go here
+			saveStatus = 'Saved';
+		}}
+	>
+		<div>
+			{saveStatus}
+		</div>
+	</Editor>
+</main>
+```
 
 # Development Installation
-
-Follow these steps to install and setup the project:
 
 1. Install Node.js and npm. Download them [here](https://nodejs.org/en/download/).
 
