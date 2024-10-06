@@ -74,6 +74,7 @@
 	"dependencies": {
 		"@melt-ui/pp": "^0.1.2",
 		"@melt-ui/svelte": "^0.42.0",
+		"@supabase/supabase-js": "^2.45.4",
 		"@tiptap/core": "^2.1.7",
 		"@tiptap/extension-bubble-menu": "^2.1.7",
 		"@tiptap/extension-color": "^2.0.4",

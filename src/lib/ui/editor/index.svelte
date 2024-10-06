@@ -64,6 +64,7 @@
 	 * @default false
 	 */
 	export let disableLocalStorage = false;
+
 	export let editor: Editor | undefined = undefined;
 
 	let element: Element;
@@ -110,7 +111,7 @@
 			autofocus: 'end'
 		});
 
-		return () => editor.destroy();
+		return () => editor?.destroy();
 	});
 </script>
 

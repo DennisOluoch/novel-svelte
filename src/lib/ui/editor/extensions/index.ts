@@ -17,9 +17,6 @@ import UpdatedImage from './updated-image.js';
 
 export const defaultExtensions = [
 	StarterKit.configure({
-		heading: {
-			levels: [1,2,3,4,5,6]
-		},
 		bulletList: {
 			HTMLAttributes: {
 				class: 'list-disc list-outside leading-3 -mt-2'

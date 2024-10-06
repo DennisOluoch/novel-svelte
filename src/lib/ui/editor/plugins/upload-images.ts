@@ -3,6 +3,7 @@
 import { addToast } from '$lib/ui/toasts.svelte';
 import { EditorState, Plugin, PluginKey } from '@tiptap/pm/state';
 import { Decoration, DecorationSet, EditorView } from '@tiptap/pm/view';
+import { handleImageUpload } from './image-upload-providers/providers.js';
 
 const uploadKey = new PluginKey('upload-image');
 
@@ -96,6 +97,7 @@ export function startImageUpload(file: File, view: EditorView, pos: number) {
 		view.dispatch(tr);
 	};
 
+
 	handleImageUpload(file).then((src) => {
 		const { schema } = view.state;
 
@@ -119,49 +121,3 @@ export function startImageUpload(file: File, view: EditorView, pos: number) {
 	});
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const handleImageUpload = async (file: File) => {
-	await sleep(1000);
-	return file;
-	// upload to Vercel Blob
-	// return new Promise((resolve) => {
-	// 	// toast.promise(
-	// 	//   fetch("/api/upload", {
-	// 	//     method: "POST",
-	// 	//     headers: {
-	// 	//       "content-type": file?.type || "application/octet-stream",
-	// 	//       "x-vercel-filename": file?.name || "image.png",
-	// 	//     },
-	// 	//     body: file,
-	// 	//   }).then(async (res) => {
-	// 	//     // Successfully uploaded image
-	// 	//     if (res.status === 200) {
-	// 	//       const { url } = (await res.json()) as BlobResult;
-	// 	//       // preload the image
-	// 	//       let image = new Image();
-	// 	//       image.src = url;
-	// 	//       image.onload = () => {
-	// 	//         resolve(url);
-	// 	//       };
-	// 	//       // No blob store configured
-	// 	//     } else if (res.status === 401) {
-	// 	//       resolve(file);
-
-	// 	//       throw new Error(
-	// 	//         "`BLOB_READ_WRITE_TOKEN` environment variable not found, reading image locally instead."
-	// 	//       );
-	// 	//       // Unknown error
-	// 	//     } else {
-	// 	//       throw new Error(`Error uploading image. Please try again.`);
-	// 	//     }
-	// 	//   }),
-	// 	//   {
-	// 	//     loading: "Uploading image...",
-	// 	//     success: "Image uploaded successfully.",
-	// 	//     error: (e) => e.message,
-	// 	//   }
-	// 	// );
-	// 	resolve(file);
-	// });
-};
