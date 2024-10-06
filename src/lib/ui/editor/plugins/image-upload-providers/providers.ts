@@ -30,8 +30,6 @@ const getEnvConfig = () => {
     const tokenKey = `VITE_${provider.toUpperCase()}_ACCESS_TOKEN`;
     const accessToken = import.meta.env[tokenKey];
     
-    console.log(accessToken)
-    
     if (!accessToken) {
       throw new UploadConfigError(
         `${tokenKey} is required in your .env file`
@@ -81,9 +79,6 @@ const providers = {
         const { data, error } = await supabase.storage
         .from(config.bucketName)
         .upload(fileName, file);
-
-        console.log(data)
-        console.log(error)
         
         if (error) throw new Error(`Supabase upload failed: ${error.message}`);
         
