@@ -138,7 +138,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
 			title: 'Heading 6',
 			description: 'Smaller section heading.',
 			searchTerms: ['subtitle', 'smallest'],
-			icon: Heading5,
+			icon: Heading6,
 			command: ({ editor, range }: CommandProps) => {
 				editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run();
 			}
