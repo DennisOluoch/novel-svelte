@@ -7,6 +7,9 @@
 		Heading1,
 		Heading2,
 		Heading3,
+		Heading4,
+		Heading5,
+		Heading6,
 		TextQuote,
 		ListOrdered,
 		TextIcon,
@@ -45,6 +48,24 @@
 			icon: Heading3,
 			command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
 			isActive: editor.isActive('heading', { level: 3 })
+		},
+		{
+			name: 'Heading 4',
+			icon: Heading4,
+			command: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
+			isActive: editor.isActive('heading', { level: 4 })
+		},
+		{
+			name: 'Heading 5',
+			icon: Heading5,
+			command: () => editor.chain().focus().toggleHeading({ level: 5 }).run(),
+			isActive: editor.isActive('heading', { level: 5 })
+		},
+		{
+			name: 'Heading 6',
+			icon: Heading6,
+			command: () => editor.chain().focus().toggleHeading({ level: 6 }).run(),
+			isActive: editor.isActive('heading', { level: 6 })
 		},
 		{
 			name: 'To-do List',

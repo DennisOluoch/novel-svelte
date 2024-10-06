@@ -10,6 +10,9 @@ import {
 	Heading1,
 	Heading2,
 	Heading3,
+	Heading4,
+	Heading5,
+	Heading6,
 	List,
 	ListOrdered,
 	MessageSquarePlus,
@@ -111,6 +114,33 @@ const getSuggestionItems = ({ query }: { query: string }) => {
 			icon: Heading3,
 			command: ({ editor, range }: CommandProps) => {
 				editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run();
+			}
+		},
+		{
+			title: 'Heading 4',
+			description: 'Smaller section heading.',
+			searchTerms: ['subtitle', 'smaller'],
+			icon: Heading4,
+			command: ({ editor, range }: CommandProps) => {
+				editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run();
+			}
+		},
+		{
+			title: 'Heading 5',
+			description: 'An even smaller section heading.',
+			searchTerms: ['subtitle', 'even smaller'],
+			icon: Heading5,
+			command: ({ editor, range }: CommandProps) => {
+				editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run();
+			}
+		},
+		{
+			title: 'Heading 6',
+			description: 'Smaller section heading.',
+			searchTerms: ['subtitle', 'smallest'],
+			icon: Heading5,
+			command: ({ editor, range }: CommandProps) => {
+				editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run();
 			}
 		},
 		{
