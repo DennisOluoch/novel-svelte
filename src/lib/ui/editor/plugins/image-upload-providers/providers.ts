@@ -71,7 +71,12 @@ const providers = {
         throw new UploadConfigError('VITE_SUPABASE_URL is required in your .env file');
         }
 
-        const supabase = createClient(supabaseUrl, config.accessToken);
+        const supabase = createClient(supabaseUrl, config.accessToken, {
+          auth: {
+            autoRefreshToken: false,
+            persistSession: false
+        }
+        });
 
         const fileExt = file.name.split('.').pop();
         const fileName = `${Math.random()}.${fileExt}`;
