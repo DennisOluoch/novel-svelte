@@ -17,6 +17,7 @@
 	import Toasts, { addToast } from '../toasts.svelte';
 
 	import EditorBubbleMenu from './bubble-menu/index.svelte';
+	import { uploadConfig, type UploadConfig } from '$lib/stores/uploadConfig.js';
 	/**
 	 * Additional classes to add to the editor container.
 	 * Defaults to "relative min-h-[500px] w-full max-w-screen-lg border-stone-200 bg-white p-12 px-8 sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:px-12 sm:shadow-lg".
@@ -65,6 +66,18 @@
 	 */
 	export let disableLocalStorage = false;
 
+	/**
+	 * Configuration for the image upload provider.
+	 * This is optional. If not provided, image upload functionality may be limited.
+	 * @type {Object} UploadConfig
+	 * @property {('vercel' | 'supabase' | 'cloudinary')} provider - The name of the upload provider.
+	 * @property {string} bucketName - The name of the bucket to upload to.
+	 * @property {string} accessToken - The access token for the upload provider.
+	 * @property {string} [supabaseUrl] - The Supabase URL (required if provider is 'supabase').
+	 * @property {string} [cloudinaryCloudName] - The Cloudinary cloud name (required if provider is 'cloudinary').
+	 */
+	export let imageProviderConfig: UploadConfig | undefined = undefined;
+
 	export let editor: Editor | undefined = undefined;
 
 	let element: Element;
@@ -110,6 +123,10 @@
 			},
 			autofocus: 'end'
 		});
+
+		if (imageProviderConfig) {
+			uploadConfig.setConfig({ ...imageProviderConfig });
+		}
 
 		return () => editor?.destroy();
 	});

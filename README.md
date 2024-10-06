@@ -23,13 +23,13 @@ Made for [DennisOluoch](https://github.com/DennisOluoch)
 - **Tiptap** - Headless editor framework
 - **Tailwind CSS** - Styling
 
-# Installation
+## Installation
 
 ```bash
 npm i another-novel-svelte
 ```
 
-# Basic Usage
+## Basic Usage
 
 ```svelte
 <script>
@@ -37,11 +37,19 @@ npm i another-novel-svelte
 
     let saveStatus = 'Saved';
     let editor;
+
+    // Image upload configuration
+    const imageProviderConfig = {
+        provider: 'vercel',
+        bucketName: 'your-bucket-name',
+        accessToken: 'your-access-token'
+    };
 </script>
 
 <main>
     <Editor
         bind:editor
+        {imageProviderConfig}
         onUpdate={() => {
             saveStatus = 'Unsaved';
         }}
@@ -58,57 +66,59 @@ npm i another-novel-svelte
 </main>
 ```
 
-# Image Upload Configuration
+## Image Upload Configuration
 
-The editor supports image uploads to multiple providers: Vercel Blob, Supabase Storage, and Cloudinary.
+The editor supports image uploads to multiple providers: Vercel Blob, Supabase Storage, and Cloudinary. Instead of using environment variables, we now pass the configuration directly to the Editor component.
 
-## Environment Variables Setup
+## Configuration Setup
 
-Create a `.env` file in your project root. For client-side access, all variables must be prefixed with `VITE_`:
+Create a configuration object in your Svelte component:
 
-```env
-# Required for all providers
-VITE_UPLOAD_PROVIDER=supabase  # Options: 'vercel', 'supabase', 'cloudinary'
-VITE_UPLOAD_BUCKET_NAME=your-bucket-name
-
-# Provider-specific configuration
-
-# For Vercel Blob:
-VITE_VERCEL_ACCESS_TOKEN=your-token
-
-# For Supabase:
-VITE_SUPABASE_ACCESS_TOKEN=your-token
-VITE_SUPABASE_URL=your-project-url
-
-# For Cloudinary:
-VITE_CLOUDINARY_ACCESS_TOKEN=your-token
-VITE_CLOUDINARY_CLOUD_NAME=your-cloud-name
+```typescript
+const imageProviderConfig = {
+    provider: 'vercel', // Options: 'vercel', 'supabase', 'cloudinary'
+    bucketName: 'your-bucket-name',
+    accessToken: 'your-access-token',
+    // Additional properties based on the provider:
+    // For Supabase:
+    // supabaseUrl: 'your-project-url'
+    // For Cloudinary:
+    // cloudinaryCloudName: 'your-cloud-name'
+};
 ```
 
-## Provider Setup Instructions
+Then pass this configuration to the Editor component:
 
-### Vercel Blob
+```svelte
+<Editor {imageProviderConfig} ...otherProps>
+    <!-- Editor content -->
+</Editor>
+```
+
+### Provider Setup Instructions
+
+#### Vercel Blob
 
 1. Set up a Vercel project
 2. Get your Blob access token from the Vercel dashboard
-3. Configure environment variables as shown above
+3. Configure the `imageProviderConfig` as shown above
 
-### Supabase Storage
+#### Supabase Storage
 
 1. Create a Supabase project
 2. Create a storage bucket
 3. Set the storage bucket to public if you want the images to be publicly accessible
 4. Get your service role key from the project settings
-5. Configure environment variables as shown above
+5. Configure the `imageProviderConfig` as shown above, including the `supabaseUrl`
 
-### Cloudinary
+#### Cloudinary
 
 1. Create a Cloudinary account
 2. Create an upload preset (can be done in the Settings > Upload section)
 3. Get your cloud name and API credentials
-4. Configure environment variables as shown above
+4. Configure the `imageProviderConfig` as shown above, including the `cloudinaryCloudName`
 
-## Image Upload Features
+### Image Upload Features
 
 - 📤 Drag and drop image uploads
 - 📋 Paste images directly from clipboard
@@ -118,11 +128,11 @@ VITE_CLOUDINARY_CLOUD_NAME=your-cloud-name
 - 📏 Image resizing after upload
 - 💾 Automatic image optimization
 
-## Security Considerations
+### Security Considerations
 
-⚠️ **Important**: The environment variables configured above will be visible in the client-side code. For production use, we strongly recommend implementing a server-side API endpoint to handle the actual upload operations.
+⚠️ **Important**: The configuration passed to the Editor component will be visible in the client-side code. For production use, we strongly recommend implementing a server-side API endpoint to handle the actual upload operations.
 
-### Recommended Production Setup
+#### Recommended Production Setup
 
 1. Create a server-side API endpoint (using SvelteKit or your preferred backend):
 
@@ -159,7 +169,7 @@ const uploadFile = async (file: File) => {
 };
 ```
 
-# Development
+## Development
 
 1. Install Node.js and npm ([download here](https://nodejs.org/en/download/))
 
@@ -176,9 +186,7 @@ cd novel-svelte
 npm install
 ```
 
-4. Create and configure your `.env` file based on the examples above
-
-5. Start the development server:
+4. Start the development server:
 
 ```bash
 npm run dev
@@ -186,7 +194,7 @@ npm run dev
 
 Visit `http://localhost:5173/` to see the preview.
 
-## Props
+### Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -199,11 +207,12 @@ Visit `http://localhost:5173/` to see the preview.
 | `debounceDuration` | `number` | `750` | Duration to debounce the onDebouncedUpdate callback |
 | `storageKey` | `string` | `'novel__content'` | Key to use for storing editor content in localStorage |
 | `disableLocalStorage` | `boolean` | `false` | Disable local storage read/save |
+| `imageProviderConfig` | `UploadConfig \| undefined` | `undefined` | Configuration for image upload provider |
 
-## Contributing
+### Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+### License
 
 MIT License

@@ -7,6 +7,7 @@ import { handleImageUpload } from './image-upload-providers/providers.js';
 
 const uploadKey = new PluginKey('upload-image');
 
+
 const UploadImagesPlugin = () =>
 	new Plugin({
 		key: uploadKey,

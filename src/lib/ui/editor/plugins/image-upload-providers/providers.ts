@@ -1,6 +1,6 @@
+import { uploadConfig } from '$lib/stores/uploadConfig.js';
 import { addToast } from '$lib/ui/toasts.svelte';
-
-type SupportedProvider = 'vercel' | 'supabase' | 'cloudinary';
+import { get } from 'svelte/store';
 
 class UploadConfigError extends Error {
   constructor(message: string) {
@@ -8,40 +8,6 @@ class UploadConfigError extends Error {
     this.name = 'UploadConfigError';
   }
 }
-
-// Read and validate environment variables
-const getEnvConfig = () => {
-    const provider = import.meta.env.VITE_UPLOAD_PROVIDER as SupportedProvider;
-    const bucketName = import.meta.env.VITE_UPLOAD_BUCKET_NAME;
-    
-    if (!provider) {
-      throw new UploadConfigError(
-        'VITE_UPLOAD_PROVIDER is required in your .env file. Supported values: vercel, supabase, cloudinary'
-      );
-    }
-    
-    if (!bucketName) {
-      throw new UploadConfigError(
-        'VITE_UPLOAD_BUCKET_NAME is required in your .env file'
-      );
-    }
-  
-    // Provider-specific token validation
-    const tokenKey = `VITE_${provider.toUpperCase()}_ACCESS_TOKEN`;
-    const accessToken = import.meta.env[tokenKey];
-    
-    if (!accessToken) {
-      throw new UploadConfigError(
-        `${tokenKey} is required in your .env file`
-      );
-    }
-  
-    return {
-      provider,
-      bucketName,
-      accessToken
-    };
-  };
   
 const providers = {
     vercel: async (file: File, config: { accessToken: string, bucketName: string }) => {
@@ -63,15 +29,14 @@ const providers = {
         return url;
     },
 
-    supabase: async (file: File, config: { accessToken: string, bucketName: string }) => {
+    supabase: async (file: File, config: { accessToken: string, bucketName: string, supabaseUrl: string }) => {
         const { createClient } = await import('@supabase/supabase-js');
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         
-        if (!supabaseUrl) {
-        throw new UploadConfigError('VITE_SUPABASE_URL is required in your .env file');
+        if (!config.supabaseUrl) {
+        throw new UploadConfigError('supabase url is required');
         }
 
-        const supabase = createClient(supabaseUrl, config.accessToken, {
+        const supabase = createClient(config.supabaseUrl, config.accessToken, {
           auth: {
             autoRefreshToken: false,
             persistSession: false
@@ -94,19 +59,17 @@ const providers = {
         return publicUrl;
     },
 
-    cloudinary: async (file: File, config: { accessToken: string, bucketName: string }) => {
-        const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-        
-        if (!cloudName) {
-        throw new UploadConfigError('VITE_CLOUDINARY_CLOUD_NAME is required in your .env file');
-        }
+    cloudinary: async (file: File, config: { accessToken: string, bucketName: string, cloudinaryCloudName: string }) => {
+        if (!config.cloudinaryCloudName) {
+          throw new UploadConfigError('cloudinaryCloudName is required in the configuration');
+        }  
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', config.bucketName);
 
         const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${config.cloudinaryCloudName}/image/upload`,
         {
             method: 'POST',
             headers: {
@@ -129,8 +92,12 @@ const providers = {
 export const handleImageUpload = async (file: File) => {
   try {
     // Get configuration from environment variables
-    const config = getEnvConfig();
+    const config = get(uploadConfig)
     
+    if (!config) {
+      throw new UploadConfigError('Upload configuration is not set');
+    }
+
     // Validate file type
     if (!file.type.includes('image/')) {
       throw new Error('File type not supported.');
@@ -157,10 +124,8 @@ export const handleImageUpload = async (file: File) => {
       }
     });
 
-    const url = await uploadFn(file, {
-      accessToken: config.accessToken,
-      bucketName: config.bucketName
-    });
+    //@ts-ignore
+    const url = await uploadFn(file, config);
 
     // Add success toast
     addToast({
