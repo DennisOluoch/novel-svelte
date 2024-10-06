@@ -1,6 +1,6 @@
 {
 	"name": "another-novel-svelte",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Heavily biased Notion-style WYSIWYG editor without the bells and whistles.",
 	"license": "MIT",
 	"author": "DennisOluoch",

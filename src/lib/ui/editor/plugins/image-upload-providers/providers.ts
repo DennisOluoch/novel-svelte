@@ -30,6 +30,8 @@ const getEnvConfig = () => {
     const tokenKey = `VITE_${provider.toUpperCase()}_ACCESS_TOKEN`;
     const accessToken = import.meta.env[tokenKey];
     
+    console.log(accessToken)
+    
     if (!accessToken) {
       throw new UploadConfigError(
         `${tokenKey} is required in your .env file`
